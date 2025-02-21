@@ -13,7 +13,7 @@ from torch.utils.data import TensorDataset, DataLoader
 from torch.optim import Adam
 
 
-from src.layer import MonoLinear
+from monotonic_nn.layer import MonoLinear
 
 def target_fn(x):
     if isinstance(x, np.ndarray):
