@@ -17,13 +17,11 @@ python toy_run.py --n_epochs 1500 --n_layers 2 --decay 0.01 --hidden_dim 32 --co
 ### Setup
 Data points $\mathcal{D} = \left( \left(X_i, Y_i\right)\right)_{1 \leq i \leq n}$ are independent and identically distributed and constructed using the following method. For all $i \in \{1, \ldots, n\}$, with $\sigma = 0.05$,
 
-$$
-X_i \underset{\text{i.i.d.}}{\sim} \text{Uniform}(0.5, 20) \\
+$$X_i \underset{\text{i.i.d.}}{\sim} \text{Uniform}(0.5, 20)$$
 
-\varepsilon_i \underset{\text{i.i.d.}}{\sim} \mathcal{N}(0, \sigma^2)\\
+$$\varepsilon_i \underset{\text{i.i.d.}}{\sim} \mathcal{N}(0, \sigma^2)$$
 
-Y_i = \ln(X_i) + \varepsilon_i
-$$
+$$Y_i = \ln(X_i) + \varepsilon_i$$
 
 The model consists of stacked `MonoLinear` layers with an ELU base activation, except for the last layer. The monotonicity indicator of all layers is 1 by default.
 
