@@ -3,8 +3,6 @@ from tqdm import tqdm
 import numpy as np
 import argparse
 
-import matplotlib.pyplot as plt
-
 import torch
 import torch.nn as nn
 from torch.nn import functional as F
@@ -33,6 +31,7 @@ def eval(model, X, y, device, print_report=False):
     model.eval()
     with torch.no_grad():
         y_pred = model(torch.Tensor(X, device=device))
+        y_pred = F.sigmoid(y_pred)
         y_pred = y_pred.cpu().numpy()
         y_pred = (y_pred > 0.5).astype(int)
     if print_report:
@@ -93,10 +92,7 @@ def main(args):
 
 
     train_dataset = TensorDataset(torch.tensor(X_train, dtype=torch.float32), torch.tensor(y_train, dtype=torch.float32))
-    test_dataset = TensorDataset(torch.tensor(X_test, dtype=torch.float32), torch.tensor(y_test, dtype=torch.float32))
-
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size)
 
     eval_every = 10
     with tqdm(np.arange(n_epochs)) as pbar:

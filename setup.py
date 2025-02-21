@@ -7,6 +7,8 @@ setup(
     install_requires=[
         'torch',
         'numpy',
+        'scikit-learn',
+        'pandas'
     ],
     author='Huu Tan Mai',
     author_email='huutan.mai@gmail.com',
