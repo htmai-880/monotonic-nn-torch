@@ -1,3 +1,5 @@
+# Taken directly from https://github.com/airtai/monotonic-nn/blob/main/airt/keras/experiments.py to download the data
+
 import urllib
 import shutil
 from tempfile import TemporaryDirectory
@@ -20,12 +22,10 @@ def _download_url(url: str, output_path: Path) -> None:
     with _DownloadProgressBar(
         unit="B", unit_scale=True, miniters=1, desc=url.split("/")[-1]
     ) as t:
-        # nosemgrep: python.lang.security.audit.dynamic-urllib-use-detected.dynamic-urllib-use-detected
         urllib.request.urlretrieve(
             url, filename=output_path, reporthook=t.update_to
-        )  # nosec
+        )
 
-# %% ../../nbs/Experiments.ipynb 8
 def _get_data_path(data_path: Optional[Union[Path, str]] = None) -> Path:
     if data_path is None:
         data_path = "./data"
@@ -52,13 +52,11 @@ def _download_data(
         else:
             print(f"Upload skipped, file {(data_path / filename).resolve()} exists.")
 
-# %% ../../nbs/Experiments.ipynb 10
 def _sanitize_col_names(df: pd.DataFrame) -> pd.DataFrame:
     columns = {c: c.replace(" ", "_") for c in df}
     df = df.rename(columns=columns)
     return df
 
-# %% ../../nbs/Experiments.ipynb 12
 def get_train_n_test_data(
     dataset_name: str,
     *,
