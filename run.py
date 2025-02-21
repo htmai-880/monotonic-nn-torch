@@ -30,7 +30,7 @@ def make_dataset(name):
 def eval(model, X, y, device, print_report=False):
     model.eval()
     with torch.no_grad():
-        y_pred = model(torch.Tensor(X, device=device))
+        y_pred = model(torch.Tensor(X, device=device)).squeeze(-1)
         y_pred = F.sigmoid(y_pred)
         y_pred = y_pred.cpu().numpy()
         y_pred = (y_pred > 0.5).astype(int)
