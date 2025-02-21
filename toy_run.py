@@ -18,11 +18,11 @@ from src.layer import MonoLinear
 def target_fn(x):
     if isinstance(x, np.ndarray):
         # return  0.5 * x ** 3 + x**2 +0.3 * np.sin(5*x)
-        # return np.log(x)
-        return np.exp(-x**2)
+        return np.log(x)
+        # return np.exp(-x**2)
     # return 0.5 * x ** 3 + x**2 + 0.3 * torch.sin(5*x)
-    # return np.log(x)
-    return torch.exp(-x**2)
+    return np.log(x)
+    # return torch.exp(-x**2)
 
 def make_dataset(n_samples, std=1, x_min=-20, x_max = 20):
     x = np.random.uniform(x_min, x_max, n_samples)
@@ -56,7 +56,7 @@ def main(args):
     # Prepare model
 
     model = nn.Sequential(
-        MonoLinear(1, hidden_dim, act="ELU", monotonicity_indicator=-1),
+        MonoLinear(1, hidden_dim, act="ELU", monotonicity_indicator=1, is_convex=args.convex, is_concave=args.concave),
         *([MonoLinear(hidden_dim, hidden_dim, act="ELU")] * (args.n_layers-1)), 
         MonoLinear(hidden_dim, 1, act=None)
     )
@@ -109,6 +109,7 @@ def main(args):
 
     X_true = np.linspace(x_min, x_max + (x_max - x_min) * 0.3, 1000)
     y_true = target_fn(X_true)
+    plt.figure()
     plt.plot(X_true, y_true, label="True")
 
 
@@ -123,19 +124,22 @@ def main(args):
         X_ = torch.cat(X_).numpy()
         y_preds = torch.cat(y_preds).numpy()
 
-    plt.scatter(X_, y_preds, label="Predictions", color="red", alpha=0.5, s=2)
+    plt.scatter(X_, y_preds, label="Predictions", color="red", alpha=0.25, s=2)
 
     X_inductive = np.linspace(x_max, x_max + (x_max - x_min) * 0.3, 1000)
     with torch.no_grad():
         x = torch.tensor(X_inductive, dtype=torch.float32).unsqueeze(-1)
         y_pred = model(x.to(device)).cpu().detach().numpy()
     
-    plt.scatter(X_inductive, y_pred, label="Out of distribution", color="green", alpha=0.5, s=2)
+    plt.scatter(X_inductive, y_pred, label="Out of distribution", color="green", alpha=0.25, s=2)
 
     plt.xlabel("x")
     plt.ylabel("y = f(x)")
     plt.legend()
     plt.grid()
+    plt.title("Approximation of the target function")
+    # Save figure
+    plt.savefig("toy_example_prediction.png")
     plt.show()
 
 if __name__ == "__main__":
@@ -148,8 +152,10 @@ if __name__ == "__main__":
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--decay", type=float, default=0.0)
     parser.add_argument("--std", type=float, default=0.05)
-    parser.add_argument("--x_min", type=float, default=-20)
+    parser.add_argument("--x_min", type=float, default=0.5)
     parser.add_argument("--x_max", type=float, default=20)
+    parser.add_argument("--convex", action="store_true")
+    parser.add_argument("--concave", action="store_true")
     args = parser.parse_args()
     main(args)
 

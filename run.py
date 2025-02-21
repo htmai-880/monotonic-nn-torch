@@ -11,8 +11,8 @@ from torch.utils.data import TensorDataset, DataLoader
 from torch.optim import Adam
 
 
-from src.layer import MonoLinear
-from src.data import get_train_n_test_data
+from monotonic_nn.layer import MonoLinear
+from monotonic_nn.data import get_train_n_test_data
 
 from sklearn.metrics import classification_report, f1_score, recall_score, precision_score
 

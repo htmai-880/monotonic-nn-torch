@@ -13,7 +13,7 @@ setup(
     author='Huu Tan Mai',
     author_email='huutan.mai@gmail.com',
     description='A package for monotonic neural networks using PyTorch',
-    url='https://github.com/yourusername/monotonic-nn-torch',
+    url='https://github.com/htmai-880/monotonic-nn-torch',
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: MIT License',
@@ -21,3 +21,5 @@ setup(
     ],
     python_requires='>=3.6',
 )
+
+# Install using
